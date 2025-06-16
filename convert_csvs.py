@@ -1,0 +1,78 @@
+import csv
+import os
+import uuid
+from pathlib import Path
+
+INPUT_DIR = Path('convert-cvs')
+OUTPUT_DIR = Path('converted-csvs')
+
+OUTPUT_HEADER = [
+    'Fixture', 'Optics', 'Wattage', 'Unit', 'Circuit', 'Channel', 'Groups',
+    'Patch', 'DMX Mode', 'DMX Channels', 'Position X', 'Position Y', 'Position Z',
+    'Focus Pan', 'Focus Tilt', 'Invert Pan', 'Pan Start Limit', 'Pan End Limit',
+    'Invert Tilt', 'Tilt Start Limit', 'Tilt End Limit', 'Identifier',
+    'External Identifier'
+]
+
+def convert_file(path, out_path):
+    with open(path, encoding='latin1', newline='') as f:
+        reader = csv.reader(f)
+        next(reader, None)  # skip START_CHANNELS
+        header = next(reader)
+        indices = {name: i for i, name in enumerate(header)}
+        rows = list(reader)
+
+    with open(out_path, 'w', encoding='latin1', newline='') as f_out:
+        writer = csv.writer(f_out)
+        writer.writerow(OUTPUT_HEADER)
+        for row in rows:
+            if not row:
+                continue
+            tag = row[0]
+            if tag == 'END_CHANNELS':
+                break
+            if tag == 'START_FIXTURES':
+                break
+            fixture = f"{row[indices['MANUFACTURER']]} {row[indices['FIXTURE_TYPE']]}".strip()
+            address = row[indices['ADDRESS']].strip().replace('/', '.')
+            channel = row[indices['CHANNEL']].strip()
+            pos_x = f"{row[indices['LOCATION_X']]}m"
+            pos_y = f"{row[indices['LOCATION_Y']]}m"
+            pos_z = f"{row[indices['LOCATION_Z']]}m"
+            identifier = str(uuid.uuid4())
+            out_row = [
+                fixture,
+                'N/A',  # Optics
+                'N/A',  # Wattage
+                '',      # Unit
+                '',      # Circuit
+                channel,
+                '',      # Groups
+                address,
+                'Standard',  # DMX Mode
+                1,           # DMX Channels
+                pos_x,
+                pos_y,
+                pos_z,
+                '0°',  # Focus Pan
+                '0°',  # Focus Tilt
+                'No',  # Invert Pan
+                '0°',  # Pan Start Limit
+                '0°',  # Pan End Limit
+                'No',  # Invert Tilt
+                '0°',  # Tilt Start Limit
+                '0°',  # Tilt End Limit
+                identifier,
+                'N/A'  # External Identifier
+            ]
+            writer.writerow(out_row)
+
+def main():
+    OUTPUT_DIR.mkdir(exist_ok=True)
+    for csv_file in INPUT_DIR.glob('*.csv'):
+        out_name = f"{csv_file.stem}_capture_patch_export.csv"
+        out_file = OUTPUT_DIR / out_name
+        convert_file(csv_file, out_file)
+
+if __name__ == '__main__':
+    main()

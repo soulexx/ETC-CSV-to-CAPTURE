@@ -37,3 +37,16 @@ Neue CSV-Datei mit folgendem Format für Capture:
 
 💾 Ausgabe-Dateiname: capture_patch_export.csv
 """
+
+## Nutzung
+
+Alle CSV-Dateien im Ordner `convert-cvs` lassen sich gesammelt mit
+`convert_csvs.py` konvertieren:
+
+```bash
+python3 convert_csvs.py
+```
+
+Die erzeugten Dateien werden im Ordner `converted-csvs` abgelegt.
+Der Dateiname richtet sich nach der Eingabedatei und endet auf
+`_capture_patch_export.csv`.
