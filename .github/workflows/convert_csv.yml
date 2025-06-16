@@ -2,31 +2,23 @@ name: Convert CSV to Capture
 
 on:
   push:
-    paths:
-      - 'convert-cvs/**/*.csv'
-      - 'convert_csvs.py'
-      - '.github/workflows/convert_csv.yml'
-  pull_request:
-    paths:
-      - 'convert-cvs/**/*.csv'
-      - 'convert_csvs.py'
-      - '.github/workflows/convert_csv.yml'
+    branches: [main]
 
 jobs:
   convert:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
-      - name: Run converter
-        run: python convert_csvs.py
-      - name: Upload results
-        uses: actions/upload-artifact@v3
+          python-version: 3.11
+      - name: Install dependencies
+        run: pip install pandas
+      - name: Run conversion script
+        run: python convert.py
+      - name: Upload converted file
+        uses: actions/upload-artifact@v4
         with:
-          name: converted-csvs
-          path: converted-csvs
-          if-no-files-found: ignore
+          name: converted-csv
+          path: capture_patch_export.csv
