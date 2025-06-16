@@ -2,7 +2,7 @@ name: Convert CSV to Capture
 
 on:
   push:
-    branches: [main]
+  pull_request:
 
 jobs:
   convert:
