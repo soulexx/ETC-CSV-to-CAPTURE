@@ -53,6 +53,13 @@ Die erzeugten Dateien werden im Ordner `converted-csvs` abgelegt.
 Der Dateiname richtet sich nach der Eingabedatei und endet auf
 `_capture_patch_export.csv`.
 
+### Beispiel-Dateien
+
+Im Repository liegen zwei Referenzdateien:
+`example-eos.cvs` als Eingabebeispiel und `example-capture.cvs` als
+entsprechende Ausgabe. Bitte weder löschen noch sperren, damit die
+Beispiele erhalten bleiben.
+
 
 ## Automatische Konvertierung mit GitHub Actions
 
