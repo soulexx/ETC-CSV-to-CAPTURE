@@ -50,3 +50,15 @@ python3 convert_csvs.py
 Die erzeugten Dateien werden im Ordner `converted-csvs` abgelegt.
 Der Dateiname richtet sich nach der Eingabedatei und endet auf
 `_capture_patch_export.csv`.
+
+### Einzelne Datei konvertieren
+
+Um speziell eine Datei `patch_klein.csv` im aktuellen Verzeichnis zu
+konvertieren, steht das Skript `convert_patch.py` bereit:
+
+```bash
+python3 convert_patch.py
+```
+
+Das Ergebnis wird als `capture_patch_export.csv` im selben Ordner
+abgelegt.
