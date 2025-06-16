@@ -1,0 +1,32 @@
+name: Convert CSV to Capture
+
+on:
+  push:
+    paths:
+      - 'convert-cvs/**/*.csv'
+      - 'convert_csvs.py'
+      - '.github/workflows/convert_csv.yml'
+  pull_request:
+    paths:
+      - 'convert-cvs/**/*.csv'
+      - 'convert_csvs.py'
+      - '.github/workflows/convert_csv.yml'
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Run converter
+        run: python convert_csvs.py
+      - name: Upload results
+        uses: actions/upload-artifact@v3
+        with:
+          name: converted-csvs
+          path: converted-csvs
+          if-no-files-found: ignore
