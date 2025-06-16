@@ -16,9 +16,9 @@ jobs:
       - name: Install dependencies
         run: pip install pandas
       - name: Run conversion script
-        run: python convert.py
-      - name: Upload converted file
+        run: python convert_csvs.py
+      - name: Upload converted files
         uses: actions/upload-artifact@v4
         with:
-          name: converted-csv
-          path: capture_patch_export.csv
+          name: converted-csvs
+          path: converted-csvs
