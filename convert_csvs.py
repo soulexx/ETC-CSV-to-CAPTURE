@@ -25,29 +25,36 @@ def convert_file(path, out_path):
     with open(out_path, 'w', encoding='latin1', newline='') as f_out:
         writer = csv.writer(f_out)
         writer.writerow(OUTPUT_HEADER)
+
         for row in rows:
             if not row:
                 continue
+
             tag = row[0]
-            if tag == 'END_CHANNELS':
+            if tag in ('END_CHANNELS', 'START_FIXTURES'):
                 break
-            if tag == 'START_FIXTURES':
-                break
-            fixture = f"{row[indices['MANUFACTURER']]} {row[indices['FIXTURE_TYPE']]}".strip()
-            address = row[indices['ADDRESS']].strip().replace('/', '.')
-            channel = row[indices['CHANNEL']].strip()
-            pos_x = f"{row[indices['LOCATION_X']]}m"
-            pos_y = f"{row[indices['LOCATION_Y']]}m"
-            pos_z = f"{row[indices['LOCATION_Z']]}m"
+
+            def safe(index):
+                return row[indices[index]].strip() if index in indices and row[indices[index]] else ''
+
+            fixture = f"{safe('MANUFACTURER')} {safe('FIXTURE_TYPE')}".strip()
+            address = safe('ADDRESS').replace('/', '.')
+            channel = safe('CHANNEL')
+
+            pos_x = f"{safe('LOCATION_X')}m"
+            pos_y = f"{safe('LOCATION_Z')}m"  # Tiefe
+            pos_z = f"{safe('LOCATION_Y')}m"  # Höhe
+
             identifier = str(uuid.uuid4())
+
             out_row = [
                 fixture,
                 'N/A',  # Optics
                 'N/A',  # Wattage
-                '',      # Unit
-                '',      # Circuit
+                '',     # Unit
+                '',     # Circuit
                 channel,
-                '',      # Groups
+                '',     # Groups
                 address,
                 'Standard',  # DMX Mode
                 1,           # DMX Channels
@@ -56,15 +63,16 @@ def convert_file(path, out_path):
                 pos_z,
                 '0°',  # Focus Pan
                 '0°',  # Focus Tilt
-                'No',  # Invert Pan
+                'No',    # Invert Pan
                 '0°',  # Pan Start Limit
                 '0°',  # Pan End Limit
-                'No',  # Invert Tilt
+                'No',    # Invert Tilt
                 '0°',  # Tilt Start Limit
                 '0°',  # Tilt End Limit
                 identifier,
-                'N/A'  # External Identifier
+                'N/A'   # External Identifier
             ]
+
             writer.writerow(out_row)
 
 def main():
