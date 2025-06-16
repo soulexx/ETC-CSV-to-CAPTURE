@@ -1,0 +1,3 @@
+# Ignore generated CSVs
+converted-csvs/
+__pycache__/
