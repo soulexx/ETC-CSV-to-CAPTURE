@@ -62,3 +62,13 @@ python3 convert_patch.py
 
 Das Ergebnis wird als `capture_patch_export.csv` im selben Ordner
 abgelegt.
+
+## Automatische Konvertierung mit GitHub Actions
+
+Dieser Repo enthält ein Workflow unter `.github/workflows/convert_csv.yml`. Der Workflow läuft bei jedem Push oder Pull Request und führt `convert_csvs.py` aus. Die erzeugten Dateien im Ordner `converted-csvs` werden anschließend als Artefakt hochgeladen und können im Action-Log heruntergeladen werden.
+
+### Aktivierung
+1. Repository auf GitHub hochladen.
+2. Unter "Actions" den Workflow "Convert CSV to Capture" aktivieren.
+3. Bei jedem neuen Commit (z.B. durch Codex) startet die Konvertierung automatisch.
+4. Nach Abschluss des Workflows lässt sich das Artefakt `converted-csvs` herunterladen.
